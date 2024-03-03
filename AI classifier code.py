@@ -8,6 +8,9 @@ Created on Fri Mar  1 14:49:44 2024
 import torch
 import numpy as np
 import torch.nn as nn
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def binary_accuracy(predictions, labels):
     # 四捨五入預測值到最接近的整數，並與實際標籤比較
@@ -100,3 +103,23 @@ for epoch in range(epochs):
 
     # 輸出驗證集的準確度
     print(f'Validation Accuracy: {val_accuracy.item()*100:.2f}%')
+    
+model.eval()  # 將模型設置為評估模式
+with torch.no_grad():
+    final_outputs = model(merged_data)
+    final_predictions = torch.round(final_outputs)
+    y_true = y.numpy()
+    y_pred = final_predictions.numpy()
+
+# 計算混淆矩陣
+cm = confusion_matrix(y_true, y_pred)
+
+# 使用 seaborn 繪製混淆矩陣的熱圖
+plt.figure(figsize=(4, 4))
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=False,
+            xticklabels=['Predicted 0', 'Predicted 1'],
+            yticklabels=['Actual 0', 'Actual 1'])
+plt.xlabel('Predicted')
+plt.ylabel('Actual')
+plt.title('Confusion Matrix')
+plt.show()
