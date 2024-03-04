@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Mar  1 14:49:44 2024
-
-@author: User
-"""
 import torch
 import numpy as np
 import torch.nn as nn
@@ -54,8 +48,8 @@ class LSTMClassifier(nn.Module):
         out = self.sigmoid(out)
         return out
 
-data1 = np.load('AI-data 1.npy')
-data2 = np.load('Human-data 1.npy')
+data1 = np.load('model/AI_data_1.npy')
+data2 = np.load('model/Human_data_1.npy')
 
 window_size = 100
 stride = 1
