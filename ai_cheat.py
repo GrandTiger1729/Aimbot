@@ -7,6 +7,8 @@ import win32con
 import ait
 import time 
 
+#暴力鎖
+
 path = 'model/cascade.xml' # cascade path
 obj = 'target' # detected obj name (for display)
 
