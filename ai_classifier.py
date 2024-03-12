@@ -24,15 +24,7 @@ def create_sliding_windows(data, window_size, stride=1):
 
     return np.array(windows)
 
-data1 = np.load('AI-data 1.npy')
-data2 = np.load('Human-data 1.npy')
 
-
-window_size = 100
-stride = 1
-
-AIdata = create_sliding_windows(data1, window_size, stride)
-Humandata = create_sliding_windows(data2, window_size, stride)
 
 
 class LSTMClassifier(nn.Module):
@@ -76,23 +68,25 @@ train_size = int(0.8 * len(merged_data))
 train_data, test_data = merged_data[:train_size], merged_data[train_size:]
 train_labels, test_labels = y[:train_size], y[train_size:]
 
+#cuda
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(f'Using device: {device}')
 
 input_size = 2
 hidden_size = 64
 output_size = 1
 num_layers = 1
 
-model = LSTMClassifier(input_size, hidden_size, output_size, num_layers)
+model = LSTMClassifier(input_size, hidden_size, output_size, num_layers).to(device)
 criterion = nn.BCELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
+train_data = train_data.float().to(device)
+test_data = test_data.float().to(device)
+train_labels = train_labels.to(device)
+test_labels = test_labels.to(device)
 
-train_data = torch.tensor(train_data, dtype=torch.float32)
-test_data = torch.tensor(test_data, dtype=torch.float32)
-train_labels = torch.tensor(train_labels, dtype=torch.float32)
-test_labels = torch.tensor(test_labels, dtype=torch.float32)
-
-epochs = 50
+epochs = 100
 
 for epoch in range(epochs):
     model.train()
@@ -116,8 +110,8 @@ model.eval()
 with torch.no_grad():
     final_outputs = model(test_data)
     final_predictions = torch.round(final_outputs)
-    y_true = test_labels.numpy()
-    y_pred = final_predictions.numpy()
+    y_true = test_labels.cpu().numpy()
+    y_pred = final_predictions.cpu().numpy()
 
 cm = confusion_matrix(y_true, y_pred)
 accuracy = accuracy_score(y_true, y_pred)
@@ -134,3 +128,5 @@ plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.title('Testing Confusion Matrix')
 plt.show()
+
+torch.save(model,'model/burteforce_aim_classifier.pt')
