@@ -40,7 +40,7 @@ class LSTMClassifier(nn.Module):
         out = self.sigmoid(out)
         return out
 
-data1 = np.load('model/AI_data_1.npy')
+data1 = np.load('model/AV_with_human_1.npy')
 data2 = np.load('model/Human_data_1.npy')
 
 window_size = 100
@@ -129,4 +129,4 @@ plt.ylabel('Actual')
 plt.title('Testing Confusion Matrix')
 plt.show()
 
-torch.save(model,'model/burteforce_aim_classifier.pt')
+torch.save(model,'model/assited_aim_classifier.pt')

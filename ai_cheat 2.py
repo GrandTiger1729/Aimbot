@@ -7,7 +7,7 @@ import win32con
 import ait
 import time 
 
-#輔助瞄準
+#Assisted Aim
 
 path = 'model/cascade.xml' # cascade path
 obj = 'target' # detected obj name (for display)
@@ -44,18 +44,12 @@ while True:
                     apy = (detection[0][1] + (detection[0][3] / 2)) - HEIGHT / 2
                     
                     n = 1
-                    aim_distance = 30 #輔助瞄準範圍
+                    aim_distance = 35 #Assited Aim range
                     for i in range(n):
                         if(aim_distance ** 2 >= (apx ** 2 + apy ** 2)):
                             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, round(apx), 0)
                             win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, 0, round((apy)))
                             ait.click()
-             
-                
-                
-                
-                
-        
                 
                 end = win32api.GetKeyState(0x28)  # down arrow key
                 if end < 0:
