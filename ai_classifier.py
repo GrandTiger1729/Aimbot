@@ -88,9 +88,8 @@ train_size = int(0.3 * len(merged_data))
 train_data, test_data = merged_data[:train_size], merged_data[train_size:]
 train_labels, test_labels = y[:train_size], y[train_size:]
 
-device = torch.device('cpu')
-# cuda
-# device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f'Using device: {device}')
 
 input_size = 2
